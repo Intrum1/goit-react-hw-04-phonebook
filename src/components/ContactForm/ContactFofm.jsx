@@ -1,42 +1,42 @@
 import styles from './ContactForm.module.css';
 import { nanoid } from 'nanoid';
-const { Component } = require('react');
+import  React, {useState} from 'react';
 
-class ContactForm extends Component {
-  state = {
+const ContactForm = ({ onSubmit }) => {
+  const [formData, setFormData] = useState({
     name: '',
     number: '',
+   });
+  
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value}));
   };
 
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { name, number } = this.state;
+    const { name, number } = formData;
 
     if (!name || !number) {
-      alert('Пожалуйста, введите и имя, и номер.');
+      alert('Please enter both name and number.');
       return;
     }
 
-    this.props.onSubmit({ id: nanoid(), name, number });
-    this.setState({ name: '', number: '' });
+    onSubmit({ id: nanoid(), name, number });
+    setFormData({ name: '', number: '' });
   };
 
-  render() {
-    const { name, number } = this.state;
-
+ 
     return (
-      <form onSubmit={this.handleSubmit} className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <label>
           <input
             type="text"
             name="name"
             placeholder="Имя:"
-            value={name}
-            onChange={this.handleChange}
+            value={formData.name}
+            onChange={handleInputChange}
             className={styles.input}
           />
         </label>
@@ -44,18 +44,18 @@ class ContactForm extends Component {
           <input
             type="tel"
             name="number"
-            placeholder="Номер:"
-            value={number}
-            onChange={this.handleChange}
+            placeholder="Number:"
+            value={formData.number}
+            onChange={handleInputChange}
             className={styles.input}
           />
         </label>
         <button type="submit" className={styles.button}>
-          Добавить контакт
+        Add Contact
         </button>
       </form>
     );
   }
-}
+
 
 export default ContactForm;

@@ -1,5 +1,5 @@
 import styles from './ContactList.module.css'
-
+import React from "react";
 
 const ContactList = ({ contacts, onDeleteContact }) => {
 
